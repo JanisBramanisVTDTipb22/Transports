@@ -72,6 +72,16 @@
         position: fixed; /* Keep header at the top */
         width: 100%; /* Full width */
         z-index: 1000; /* Ensure header is on top */
+        display: flex; /* Use flex for layout */
+        justify-content: space-between; /* Space out elements */
+        align-items: center; /* Center vertically */
+    }
+
+    /* Clock styling */
+    .clock {
+        font-size: 20px; /* Font size for the clock */
+        color: #fff; /* White text color */
+        padding-right: 20px; /* Right padding */
     }
 
     /* Full-height Sidebar */
@@ -88,7 +98,7 @@
     }
 
     .sidebar h2 {
-        color: #bb86fc; /* Sidebar heading color */
+        color: #1E90FF; /* Sidebar heading color changed to blue */
         margin-bottom: 20px;
         font-size: 24px; /* Increased font size */
         text-align: center; /* Centered heading */
@@ -102,9 +112,16 @@
         border-radius: 5px; /* Rounded corners */
         margin-bottom: 10px; /* Space between links */
         text-align: center; /* Center text */
-        transition: background-color 0.3s ease; /* Transition effect */
+        transition: background-color 0.3s ease, color 0.3s ease; /* Transition effect for background and text color */
     }
 
+    /* Hover effect for sidebar links */
+    .sidebar a:hover {
+        background-color: #1E90FF; /* Change background to blue on hover */
+        color: black; /* Change text to black on hover */
+    }
+
+    /* Content Styling */
     .content {
         flex: 1; /* Flexible content area */
         padding: 20px; /* Padding for content */
@@ -115,6 +132,7 @@
         z-index: 10; /* Ensure content is above the background */
     }
 
+    /* Logout Button */
     .logout-button {
         width: 140px; /* Width of the logout button */
         height: 60px; /* Height of the logout button */
@@ -127,12 +145,19 @@
         flex-direction: column; /* Stack texts vertically */
         align-items: center; /* Center text */
         justify-content: center; /* Center vertically */
-        position: relative; /* For absolute positioning of lights */
-        overflow: hidden; /* Hide overflow for lights */
         color: white; /* Text color for logout button */
         margin-top: 10px; /* Margin to separate from other links */
         transition: border 0.3s ease; /* Transition effect for border */
         text-align: center; /* Center text */
+        text-decoration: none; /* Remove underline */
+    }
+
+    /* Optional: Hover effect for logout button */
+    .logout-button:hover {
+        border: 2px solid; /* Border color on hover */
+        border-image: linear-gradient(90deg, red, yellow, green); /* RGB gradient */
+        border-image-slice: 1; /* Slice the gradient for proper rendering */
+        animation: borderAnimation 1.5s linear infinite; /* Animate the border */
     }
 
     .logout-text {
@@ -174,14 +199,6 @@
         animation: fadeInOut 1s forwards 2s; /* Fade in after middle text fades out */
     }
 
-    /* RGB border on hover for logout button */
-    .logout-button:hover {
-        border: 2px solid; /* Border color on hover */
-        border-image: linear-gradient(90deg, red, yellow, green); /* RGB gradient */
-        border-image-slice: 1; /* Slice the gradient for proper rendering */
-        animation: borderAnimation 1.5s linear infinite; /* Animate the border */
-    }
-
     @keyframes fadeOut {
         0% {
             opacity: 1; /* Fully visible */
@@ -217,30 +234,51 @@
             border-color: red; /* Loop back to red */
         }
     }
+
+    .clock {
+        font-size: 25px; /* Font size for the clock */
+        color: blue; /* Green text color */
+        background-color: black; /* Background color for clock */
+        padding: 10px; /* Padding for clock */
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+        width: 250px;
+        text-align: center;
+        font-family: 'Courier New', Courier, monospace;
+    }
 </style>
 
 <main class="create-edit-main">
     <div class="header">
-        <h1>Welcome to Public Transport</h1>
+        <h1>Public Transport</h1>
+        <div class="clock" id="clock"></div>
     </div>
     <div class="sidebar">
         <h2>Explore Public Transport</h2>
         <a href="/routes">View Routes</a>
         <a href="/schedules">Check Schedules</a>
         <a href="/fares">Fare Information</a>
-        <a href="/map">Interactive Map</a>
-        <a href="/news">Transport News</a>
-
-        <!-- Logout Form -->
-        <form action="/logout" method="POST" style="margin-top: 20px;">
-            <button type="submit" class="logout-button">
-                <span class="logout-text">Logout</span>
-                <span class="logout-text">Logout</span>
-                <span class="logout-text">Logout</span>
-            </button>
-        </form>
+        <a href="/map" class="home-link">Interactive Map</a>
+        <a href="/logout" class="logout-button">
+            <span class="logout-text">Stop</span>
+            <span class="logout-text">Get Ready</span>
+            <span class="logout-text">Go</span>
+        </a>
     </div>
     <div class="content">
-        <h2>Galvenais text and shit</h2>
+        <h1>Main Content and shit</h1>
     </div>
+    <div class="road-line"></div>
 </main>
+
+<script>
+    function updateClock() {
+        const now = new Date();
+        const options = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Riga' };
+        const timeString = now.toLocaleTimeString('en-US', options).replace(':', ' : ');
+        document.getElementById('clock').textContent = timeString;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
