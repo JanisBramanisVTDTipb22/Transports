@@ -133,7 +133,6 @@
         <a href="/" class="back-link">Back to Home</a>
         <a href="/schedules">Check Schedules</a>
         <a href="/fares">Fare Information</a>
-        <a href="/contacts">Contact Us</a>
         <a href="/map">Interactive Map</a>
     </div>
     <div class="content">

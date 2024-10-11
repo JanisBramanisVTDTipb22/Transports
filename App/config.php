@@ -3,7 +3,7 @@ return [
   "host" => "localhost",
   "dbname" => "quiz_group",
   "user" => "root",
-  "password" => "",
+  "password" => "root",
   "charset" => "utf8mb4"
 ];
 ?>

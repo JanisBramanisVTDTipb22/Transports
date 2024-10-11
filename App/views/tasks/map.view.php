@@ -54,11 +54,11 @@
     /* Digital Clock Styling */
     .digital-clock {
         font-size: 25px; /* Font size for the clock */
-        color: #00FF00; /* Bright green color */
+        color: #0000FF; /* Bright green color */
         background-color: #000; /* Black background color */
         padding: 10px; /* Padding for clock */
         border-radius: 5px; /* Rounded corners */
-        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Green glow effect */
+        box-shadow: 0 0 10px rgba(0, 0, 255, 0.5); /* Green glow effect */
         width: 250px; /* Fixed width */
         text-align: center; /* Center the text */
         position: absolute; /* Position the clock */
