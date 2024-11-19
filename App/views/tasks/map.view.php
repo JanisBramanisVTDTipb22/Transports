@@ -1,150 +1,121 @@
-<?php require "../App/views/components/head.php"; ?>
+<?php 
+$title = "Interactive Map of Latvia"; 
+require "../App/views/components/head.php"; 
+?>
 
-<style>
-    /* Overall container for the map view */
-    body {
-        margin: 0; /* Remove default body margin */
-        background-color: #282828; /* Dark background color */
-        color: #ffffff; /* Light text color */
-        font-family: Arial, sans-serif; /* Consistent font */
-        height: 100vh; /* Full viewport height */
-        overflow: hidden; /* Prevent scrolling */
-    }
+<?php require "../App/views/components/navbar.php"; ?>
 
-    .map-container {
-        display: flex;
-        flex-direction: column; /* Stack elements vertically */
-        align-items: center; /* Center align items */
-        justify-content: center; /* Center content */
-        padding: 20px; /* Padding around the container */
-        height: 100%; /* Full height of the viewport */
-        color: #e0e0e0; /* Light text color */
-    }
+<script src="https://cdn.tailwindcss.com"></script>
 
-    /* Styling for the back link */
-    .back-link {
-        margin-bottom: 20px; /* Space below the link */
-        color: #1E90FF; /* Link color */
-        text-decoration: none; /* No underline */
-        font-size: 20px; /* Font size for the link */
-        transition: color 0.3s; /* Smooth color transition */
-    }
+<div class="relative bg-gray-800 min-h-screen text-gray-200 flex flex-col items-center justify-center">
+    <!-- Back to Home Link -->
+    <a href="/" class="absolute top-4 left-4 text-blue-400 hover:text-yellow-400 transition text-lg">
+        ← Back to Home
+    </a>
 
-    /* Hover effect for the back link */
-    .back-link:hover {
-        color: #0AFF0A; /* Change color on hover */
-    }
-
-    /* Heading for the map */
-    .map-heading {
-        font-size: 30px; /* Larger font size for the heading */
-        margin-bottom: 20px; /* Space below the heading */
-        color: #FFD700; /* Gold color for the heading */
-        text-align: center; /* Center align the heading */
-    }
-
-    /* Map Container */
-    #map {
-        width: 100%; /* Full width of the container */
-        height: 500px; /* Fixed height for the map */
-        margin-bottom: 20px; /* Space below the map */
-        /* Removed border and border radius for a cleaner look */
-    }
-
-    /* Digital Clock Styling */
-    .digital-clock {
-        font-size: 25px; /* Font size for the clock */
-        color: #0000FF; /* Bright green color */
-        background-color: #000; /* Black background color */
-        padding: 10px; /* Padding for clock */
-        border-radius: 5px; /* Rounded corners */
-        box-shadow: 0 0 10px rgba(0, 0, 255, 0.5); /* Green glow effect */
-        width: 250px; /* Fixed width */
-        text-align: center; /* Center the text */
-        position: absolute; /* Position the clock */
-        top: 20px; /* Position from top */
-        right: 20px; /* Position from right */
-        z-index: 1000; /* Keep the clock on top */
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .map-heading {
-            font-size: 24px; /* Smaller font size for mobile */
-        }
-
-        .digital-clock {
-            font-size: 20px; /* Smaller clock size for mobile */
-            width: 200px; /* Smaller width for mobile */
-        }
-    }
-</style>
-
-<div class="map-container">
-    <a href="/" class="back-link">Back to Home</a>
-    <h2 class="map-heading">Interactive Map of Latvia</h2>
+    <!-- Heading -->
+    <h2 class="text-3xl md:text-4xl font-semibold text-yellow-400 mb-6 text-center">
+        <?= $title ?> <!-- Dynamic Title -->
+    </h2>
 
     <!-- Digital Clock -->
-    <div class="digital-clock" id="clock"></div>
+    <div id="clock" 
+        class="absolute top-4 right-4 bg-gray-700 text-yellow-400 text-lg md:text-xl font-mono py-2 px-4 rounded shadow-lg ring-2 ring-yellow-400 animate-pulse">
+    </div>
 
     <!-- Map Container -->
-    <div id="map"></div>
+    <div id="map" 
+        class="w-full max-w-5xl h-[500px] rounded shadow-lg border border-gray-600 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 z-10">
+    </div>
+
+    <!-- Animated Road Line -->
+    <div class="absolute inset-0 w-2 bg-gradient-to-b from-transparent via-yellow-400 to-transparent mx-auto animate-scroll-line z-0"></div>
 </div>
 
 <!-- Google Maps JavaScript API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBY52MMdRsBTUQXMV8fK5YSqZJZrd3LNSQ&callback=initMap" async defer></script>
 
 <script>
     // Initialize and add the map
     function initMap() {
-        // Center the map at Riga, Latvia
-        var location = { lat: 56.9496, lng: 24.1052 };
-        
+        // Set center location (Riga, Latvia)
+        const latviaCenter = { lat: 56.9496, lng: 24.1052 };
+
         // Create the map
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 7, // Zoom level
-            center: location,
-            styles: [ // Custom styles for the map
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 7,
+            center: latviaCenter,
+            styles: [ // Custom dark theme for the map
                 {
                     "featureType": "all",
                     "elementType": "geometry",
                     "stylers": [
                         { "visibility": "on" },
-                        { "color": "#424242" } // Darker color for land
+                        { "color": "#1b1b1b" }
                     ]
                 },
                 {
                     "featureType": "water",
                     "elementType": "geometry",
                     "stylers": [
-                        { "color": "#1A237E" } // Dark blue for water
+                        { "color": "#3333aa" }
                     ]
                 }
             ]
         });
 
-        // Add a marker for Riga
-        var marker = new google.maps.Marker({
-            position: location,
+        // Add marker for Riga
+        const rigaMarker = new google.maps.Marker({
+            position: latviaCenter,
             map: map,
-            title: 'Riga, Latvia',
+            title: "Riga, Latvia",
             icon: {
-                url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png' // Custom marker icon
+                url: "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
             }
+        });
+
+        // Marker click event
+        rigaMarker.addListener("click", () => {
+            const infoWindow = new google.maps.InfoWindow({
+                content: "<h3 class='text-yellow-400'>Riga, Latvia</h3><p class='text-gray-300'>The capital city of Latvia.</p>",
+            });
+            infoWindow.open(map, rigaMarker);
         });
     }
 
     // Function to update the digital clock
     function updateClock() {
         const now = new Date();
-        const options = { hour: '2-digit', minute: '2-digit', hour12: false }; // Format: 24-hour
-        const timeString = now.toLocaleTimeString('en-RU', options); // Localize to Riga time
-        document.getElementById('clock').innerText = timeString;
+        const options = { 
+            timeZone: "Europe/Riga", 
+            hour: "2-digit", 
+            minute: "2-digit",  
+            hour12: false 
+        };
+        const timeString = now.toLocaleTimeString("en-GB", options).replace(":", " : ");
+        document.getElementById("clock").textContent = timeString;
     }
 
-    // Update the clock every minute
-    setInterval(updateClock, 60000); // Update every minute
-    updateClock(); // Initial call to display clock immediately
+    // Update clock every second
+    setInterval(updateClock, 1000);
+    updateClock();
 </script>
+
+<style>
+    @keyframes scroll-line {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: 0 100%;
+        }
+    }
+
+    .animate-scroll-line {
+        background-size: 10px 100px;
+        animation: scroll-line 2s linear infinite;
+        opacity: 0.8;
+    }
+</style>
 
 <?php require "../App/views/components/footer.php"; ?>

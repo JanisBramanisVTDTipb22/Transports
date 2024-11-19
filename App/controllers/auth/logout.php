@@ -1,17 +1,19 @@
 <?php
+session_start(); // Ensure the session is started
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Destroy the session and clear session data
+$_SESSION = [];
+session_destroy();
 
-    $_SESSION = [];
-    session_destroy();
-
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 3600,
-        $params["path"], $params["domain"],
-        $params["secure"], $params["httponly"]
-
+// Clear session cookie if set
+$params = session_get_cookie_params();
+setcookie(session_name(), '', time() - 3600, 
+    $params["path"], 
+    $params["domain"], 
+    $params["secure"], 
+    $params["httponly"]
 );
 
-}
-header("Location: /login");
-die();
+header("Location: /login"); // Redirect to login page
+exit(); // Make sure no further code is executed
+?>

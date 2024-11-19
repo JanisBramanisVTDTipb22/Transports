@@ -7,5 +7,7 @@ return [
     "/create" => "../App/controllers/tasks/create-quiz.php",
     "/map" => "../App/views/tasks/map.view.php",
     "/routes" => "../App/views/tasks/routes.view.php",
+    "/news" => "../App/views/tasks/news.view.php",
+    "/profile" => "../App/views/auth/profile.view.php",
 ];
 ?>

@@ -1,145 +1,18 @@
-<?php require "../App/views/components/head.php"; ?>
+<?php
+// Set the default title for the page
+$title = "Public Transport - Routes";
+require "../App/views/components/head.php"; 
+?>
 
-<style>
-    /* Reusing existing styles for consistency */
-    body {
-        margin: 0;
-        color: #e0e0e0;
-        font-family: 'Arial', sans-serif;
-        display: flex;
-        height: 100vh;
-        overflow: hidden;
-        position: relative;
-        background-color: #3c3c3c; /* Dark gray background */
-    }
-
-    header {
-        background-color: #0A0908;
-        padding: 25px 0;
-    }
-
-    nav {
-        margin: auto;
-        text-align: center;
-    }
-
-    nav a {
-        color: #fff;
-        font-size: 20px;
-        text-decoration: none;
-        padding: 20px 50px;
-        margin: 0 50px;
-        border-radius: 5px;
-        transition: background-color 0.5s ease;
-    }
-
-    .header {
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 20px;
-        text-align: center;
-        position: fixed;
-        width: 100%;
-        z-index: 1000;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .sidebar {
-        background-color: black;
-        width: 200px;
-        padding: 20px;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-        position: fixed;
-        height: calc(100vh - 70px);
-        top: 70px;
-        overflow-y: auto;
-        z-index: 100;
-    }
-
-    .sidebar h2 {
-        color: #1E90FF;
-        margin-bottom: 20px;
-        font-size: 24px;
-        text-align: center;
-    }
-
-    .sidebar a {
-        display: block;
-        color: white;
-        text-decoration: none;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        text-align: center;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .sidebar a:hover {
-        background-color: #1E90FF;
-        color: black;
-    }
-
-    .content {
-        flex: 1;
-        padding: 20px;
-        margin-left: 220px;
-        margin-top: 70px;
-        height: calc(100vh - 70px);
-        position: relative;
-        z-index: 10;
-        overflow-y: auto; /* Allow scrolling for content */
-    }
-
-    /* Route Sections */
-    .route-section {
-        margin-bottom: 30px; /* Space between sections */
-    }
-
-    .route-section h2 {
-        color: #1E90FF; /* Section title color */
-        font-size: 28px; /* Font size for section titles */
-        margin-bottom: 10px; /* Space below section titles */
-    }
-
-    /* Map styling */
-    #map {
-        width: 100%; /* Full width for map */
-        height: 400px; /* Set height for map */
-        border-radius: 5px; /* Rounded corners */
-        margin-top: 10px; /* Space above the map */
-    }
-    .clock {
-        font-size: 25px; /* Font size for the clock */
-        color: blue; /* Green text color */
-        background-color: black; /* Background color for clock */
-        padding: 10px; /* Padding for clock */
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
-        width: 250px;
-        text-align: center;
-        font-family: 'Courier New', Courier, monospace;
-    }
-</style>
-
-<main class="create-edit-main">
-    <div class="header">
-        <h1>Public Transport - Routes</h1>
-        <div class="clock" id="clock"></div>
-    </div>
-    <div class="sidebar">
-        <h2>Explore Public Transport</h2>
-        <a href="/" class="back-link">Back to Home</a>
-        <a href="/schedules">Check Schedules</a>
-        <a href="/fares">Fare Information</a>
-        <a href="/map">Interactive Map</a>
-    </div>
-    <div class="content">
-        <div class="route-section">
-            <h2>Train Routes in Latvia</h2>
-            <p>Explore the train routes that connect major cities and regions in Latvia.</p>
-            <ul>
+<?php require "../App/views/components/navbar.php"; ?>
+<script src="https://cdn.tailwindcss.com"></script>
+<main class="min-h-screen bg-gray-800 text-gray-200 pt-20">
+    <div class="content p-6">
+        <!-- Train Routes Section -->
+        <div class="route-section mb-8">
+            <h2 class="text-blue-500 text-3xl mb-4">Train Routes in Latvia</h2>
+            <p class="mb-4">Explore the train routes that connect major cities and regions in Latvia.</p>
+            <ul class="list-disc pl-6">
                 <li>Riga to Daugavpils</li>
                 <li>Riga to Liepaja</li>
                 <li>Riga to Rēzekne</li>
@@ -147,10 +20,12 @@
                 <li>Liepaja to Ventspils</li>
             </ul>
         </div>
-        <div class="route-section">
-            <h2>Bus Routes in Latvia</h2>
-            <p>Discover the bus routes that serve urban and rural areas across the country.</p>
-            <ul>
+
+        <!-- Bus Routes Section -->
+        <div class="route-section mb-8">
+            <h2 class="text-blue-500 text-3xl mb-4">Bus Routes in Latvia</h2>
+            <p class="mb-4">Discover the bus routes that serve urban and rural areas across the country.</p>
+            <ul class="list-disc pl-6">
                 <li>Riga to Jurmala</li>
                 <li>Riga to Sigulda</li>
                 <li>Daugavpils to Rēzekne</li>
@@ -158,49 +33,90 @@
                 <li>Riga to Cesis</li>
             </ul>
         </div>
-        <div class="route-section">
-            <h2>Map of Routes</h2>
-            <div id="map"></div>
+
+        <!-- Map Section -->
+        <div class="route-section mb-8">
+            <h2 class="text-blue-500 text-3xl mb-4">Map of Routes</h2>
+            <div id="map" class="w-full h-96 rounded-lg mt-4"></div>
         </div>
     </div>
-    <div class="road-line"></div>
+
+    <!-- Optional Road Line Animation -->
 </main>
 
 <script>
     // Function to initialize the map (using Google Maps)
     function initMap() {
-        // Create a map object with specified options
         const mapOptions = {
             center: { lat: 56.8796, lng: 24.6032 }, // Center of Latvia
-            zoom: 7, // Zoom level
+            zoom: 7,
         };
-
-        // Create the map instance
         const map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-        // Optional: Add markers or additional features to the map
-        // Example: Adding a marker for Riga
-        new google.maps.Marker({
-            position: { lat: 56.9496, lng: 24.1052 }, // Riga coordinates
-            map: map,
-            title: "Riga",
+        // Train Stations (Example)
+        const trainStations = [
+            { name: "Riga Central Station", lat: 56.946, lng: 24.1056 },
+            { name: "Daugavpils Station", lat: 55.875, lng: 26.5316 },
+            { name: "Liepaja Station", lat: 56.5204, lng: 21.0111 },
+            { name: "Jurmala Station", lat: 56.9654, lng: 23.8181 }
+        ];
+
+        // Bus Stations (Example)
+        const busStations = [
+            { name: "Riga Bus Station", lat: 56.9465, lng: 24.1116 },
+            { name: "Sigulda Bus Station", lat: 57.1541, lng: 24.8504 },
+            { name: "Daugavpils Bus Station", lat: 55.876, lng: 26.533 },
+            { name: "Ventspils Bus Station", lat: 57.387, lng: 21.5635 }
+        ];
+
+        // Add Train Station Markers
+        trainStations.forEach(station => {
+            const marker = new google.maps.Marker({
+                position: { lat: station.lat, lng: station.lng },
+                map: map,
+                title: station.name,
+                icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            });
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<h3 class="text-blue-500">${station.name}</h3><p>Train Station</p>`
+            });
+            marker.addListener("click", function() {
+                infoWindow.open(map, marker);
+            });
+        });
+
+        // Add Bus Station Markers
+        busStations.forEach(station => {
+            const marker = new google.maps.Marker({
+                position: { lat: station.lat, lng: station.lng },
+                map: map,
+                title: station.name,
+                icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+            });
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<h3 class="text-green-500">${station.name}</h3><p>Bus Station</p>`
+            });
+            marker.addListener("click", function() {
+                infoWindow.open(map, marker);
+            });
         });
     }
 
+    // Update clock (hours and minutes only)
     function updateClock() {
         const now = new Date();
-        const options = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Riga' };
-        const timeString = now.toLocaleTimeString('en-US', options).replace(':', ' : ');
-        document.getElementById('clock').textContent = timeString;
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+
+        document.getElementById('clock').textContent = `${hours}:${minutes}`;
     }
 
-    setInterval(updateClock, 1000);
+    setInterval(updateClock, 60000); // Update every minute
     updateClock();
 </script>
 
-<!-- Add Google Maps API -->
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
-</script>
+<!-- Google Maps API -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBY52MMdRsBTUQXMV8fK5YSqZJZrd3LNSQ&callback=initMap"></script>
 
-</main>
+</body>
+</html>

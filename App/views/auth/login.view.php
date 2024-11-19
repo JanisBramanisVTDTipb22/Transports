@@ -1,51 +1,73 @@
 <?php require "../App/views/components/head.php"; ?>
-<link rel="stylesheet" href="login.css">
 
-<form method="POST" class="center"> 
-    <main class="auth-main-login">
-        <div class="auth-div">
-            <h1 class="auth-h1" style="color: #000000;">Log-in</h1> <!-- Changed to black -->
-            <form method="POST" class="auth-form">
-                <label class="auth-label" style="color: black;"> <!-- Changed to black -->
-                    Username
-                    <input class="auth-input" type="text" name="username" value="<?= $_POST["username"] ?? "" ?>" />
-                </label>
+<!-- Tailwind CDN (if not already included) -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<!-- Login Page with Image on Left, Form on Right -->
+<form method="POST" class="flex h-screen bg-gradient-to-r from-blue-200 via-pink-200 to-yellow-200 animate-gradient-bg">
+
+    <!-- Left Side Image -->
+    <div class="w-1/2 bg-cover" style="background-image: url('https://ec.europa.eu/eurostat/documents/29567/19147678/phaisarnwong2517_AdobeStock_336596257_RV.jpg/e57cc2be-a232-d68c-d5c2-20a1f9a83e12?t=1716366406127'); background-position: 0% 50%;">
+    <!-- You can replace the above URL with the actual image path -->
+    </div>
+
+    <!-- Right Side Form -->
+    <div class="w-1/2 flex justify-center items-center bg-white p-8 shadow-lg">
+        <div class="w-full sm:w-96">
+            <h1 class="text-3xl font-semibold text-black mb-6 text-center">Log-in</h1>
+
+            <!-- Form -->
+            <form method="POST" class="space-y-6">
                 
-                <label class="auth-label" style="color: black;"> <!-- Changed to black -->
-                    Password
-                    <div class="password-container">
-                        <input class="auth-input" id="password" type="password" name="password" value="<?= $_POST["password"] ?? "" ?>" />
-                        <button type="button" class="show-btn" onclick="togglePassword()">
-                            <span class="show-text">Show</span>
-                        </button>
+                <!-- Username -->
+                <label class="block text-black">
+                    <span class="block text-lg">Username</span>
+                    <input class="w-full px-4 py-2 mt-2 border border-gray-400 rounded-lg bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" name="username" value="<?= $_POST["username"] ?? "" ?>" />
+                </label>
+
+                <!-- Password -->
+                <label class="block text-black">
+                    <span class="block text-lg">Password</span>
+                    <div class="relative">
+                        <input class="w-full px-4 py-2 mt-2 border border-gray-400 rounded-lg bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-blue-500" id="password" type="password" name="password" value="<?= $_POST["password"] ?? "" ?>" />
+                        <button type="button" class="absolute top-2 right-2 px-4 py-2 text-white bg-black rounded-md" onclick="togglePassword()">Show</button>
                     </div>
                 </label>
+
+                <!-- Error Message for Password -->
                 <?php if (isset($errors["password"])) { ?>
-                    <p class="invalid-data"> <?= $errors["password"] ?> </p>
+                    <p class="text-red-500 text-sm mt-2"><?= $errors["password"] ?></p>
                 <?php } ?>
-                
-                <button class="auth-button">
-                    <span class="submit-text">Submit</span>
+
+                <!-- Submit Button -->
+                <button class="w-full px-4 py-2 mt-4 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                    Submit
                 </button>
             </form>
-            <a href="/register" class="register-link">Register</a>
+
+            <!-- Register Link -->
+            <div class="text-center mt-4">
+                <a href="/register" class="text-blue-500 hover:text-blue-700 text-lg">Don't have an account? Register</a>
+            </div>
+
+            <!-- Flash Message -->
             <?php if(isset($_SESSION["flash"])) { ?>
-                <p class="flash"> <?=$_SESSION["flash"]?></p>
+                <p class="text-red-500 text-center mt-4"><?= $_SESSION["flash"] ?></p>
             <?php } ?>
         </div>
-    </main>
+    </div>
 </form>
 
 <script>
 function togglePassword() {
     var passwordField = document.getElementById("password");
-    var showButton = document.querySelector(".show-btn");
+    var showButton = document.querySelector(".absolute button");
     if (passwordField.type === "password") {
         passwordField.type = "text";
-        showButton.innerHTML = '<span class="show-text">Hide</span>'; // Change to "Hide"
+        showButton.innerHTML = 'Hide'; // Change to "Hide"
     } else {
         passwordField.type = "password";
-        showButton.innerHTML = '<span class="show-text">Show</span>'; // Change back to "Show"
+        showButton.innerHTML = 'Show'; // Change back to "Show"
     }
 }
 </script>
@@ -53,102 +75,86 @@ function togglePassword() {
 <?php require "../App/views/components/footer.php"; ?>
 
 <style>
-body {
-    background-color: #000000; /* Black background */
+/* Gradient Animation for Background */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
-.auth-main-login {
+.animate-gradient-bg {
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+}
+
+/* Flexbox layout */
+form {
     display: flex;
-    justify-content: center; /* Center the form horizontally */
-    align-items: center; /* Center the form vertically */
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
 }
 
-.auth-div {
-    background-color: #ffffff; /* White background for the login box */
-    border-radius: 10px; /* Rounded corners for the login box */
-    padding: 20px; /* Reduced padding for compactness */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Slight shadow for depth */
+/* Left Image Styling */
+.w-1/2 {
+    width: 50%;
+    background-size: cover;
+    background-position: center;
 }
 
-.auth-label {
-    display: block;
-    margin-bottom: 5px; /* Reduced space between labels */
+/* Right Form Styling */
+.bg-white {
+    background-color: white; /* White background for the form */
 }
 
-.auth-input {
-    width: 100%; /* Full width input fields */
-    padding: 8px; /* Slightly reduced padding for compactness */
-    border: 2px solid #000; /* Black border */
-    border-radius: 5px; /* Slightly rounded corners */
-    margin-bottom: 15px; /* Space below input fields */
-    background-color: #f5f5f5; /* Light gray background for input fields */
+.text-black {
+    color: black; /* Text color for form */
 }
 
-.password-container {
-    display: flex;
-    align-items: center;
+/* Focus Ring on Inputs */
+.focus\:ring-2:focus {
+    outline: 2px solid #3B82F6; /* Blue outline when input is focused */
 }
 
-.show-btn {
-    background-color: #000; /* Black background for show button */
-    border: none;
-    color: white; /* White text */
-    padding: 8px; /* Slightly reduced padding */
-    cursor: pointer;
-    border-radius: 5px; /* Slightly rounded corners */
-    margin-left: 5px; /* Less margin for compactness */
-    transition: color 1.5s; /* Transition for text color */
+/* Form Input Fields */
+input {
+    background-color: #F3F4F6; /* Lighter background for inputs */
+    border: 1px solid #E5E7EB; /* Light border for inputs */
 }
 
-.show-btn:hover .show-text {
-    color: red; /* Red text on hover */
-    animation: colorChange 1.5s infinite; /* Animation for color change */
+input:focus {
+    border-color: #4F46E5; /* Darker border on focus */
 }
 
-/* Button styles with red-green text effect */
-.auth-button {
-    background-color: #000; /* Black background for submit button */
-    border: none;
-    padding: 10px 20px; /* More square-like button */
-    cursor: pointer;
-    border-radius: 5px; /* Slightly rounded corners */
-    margin-top: 10px; /* Space above the button */
-    width: 100%; /* Full width for button */
-    position: relative; /* For positioning */
+/* Error Message Styling */
+.text-red-500 {
+    color: red; /* Red for error messages */
 }
 
-.submit-text {
-    display: inline-block; /* Make the text inline-block */
-    color: white; /* Initially white */
-    transition: color 1.5s; /* Slower transition for text color */
+/* Button styling */
+button {
+    background-color: #4F46E5; /* Dark blue for button */
 }
 
-.auth-button:hover .submit-text {
-    color: red; /* Red on hover */
-    animation: colorChange 1.5s infinite; /* Animation for color change */
+button:hover {
+    background-color: #3B82F6; /* Lighter blue on hover */
 }
 
-/* Color change animation for the buttons */
-@keyframes colorChange {
-    0% { color: red; }
-    50% { color: yellow; }
-    100% { color: green; }
+/* Register Link Styling */
+.text-blue-500 {
+    color: #3B82F6; /* Light blue for register link */
 }
 
-.register-link {
-    color: black; /* Black for the register link */
-    text-decoration: none; /* No underline */
-    display: block; /* Block display for better spacing */
-    margin-top: 10px; /* Space above the register link */
-    text-align: center; /* Center the text */
+.text-blue-700:hover {
+    color: #2563EB; /* Darker blue on hover */
 }
 
-.register-link:hover {
-    color: gray; /* Gray color on hover for the register link */
-}
-
-.flash {
-    color: red; /* Flash message color */
+/* Flash Message Styling */
+.text-red-500 {
+    color: #EF4444; /* Red for flash error message */
 }
 </style>

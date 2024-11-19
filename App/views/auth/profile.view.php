@@ -1,169 +1,113 @@
-<?php require "../App/views/components/head.php"; ?>
+<?php 
+// Ensure $title is defined
+$title = $title ?? "Profile";  // Fallback if $title is not set
 
+require "../App/views/components/head.php"; 
+?>
+<title><?= htmlspecialchars($title) ?></title> <!-- Dynamically set the page title -->
+
+
+<?php require "../App/views/components/navbar.php"; ?>
+<script src="https://cdn.tailwindcss.com"></script>
 
 <style>
     @keyframes backgroundMove {
-  0% {
-      background-position: 0% 50%;
-  }
-  50% {
-      background-position: 100% 50%;
-  }
-  100% {
-      background-position: 0% 50%;
-  }
-}
-
-body {
-  background: linear-gradient(135deg, #301934, black, purple); /* Adjusted colors and direction */
-  background-size: 300% 100%; /* Adjust the size for smoother movement */
-  animation: backgroundMove 10s ease infinite; /* Animation to move background */
-  margin: 0;
-  color: #e0e0e0;
-  font-family: Arial, sans-serif;
-}
-
-    .profile-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        
-    }
-
-    .profile-content {
-        background-color: #1e1e1e;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-        max-width: 400px;
-        width: 100%;
-        text-align: center;
-    }
-
-    .profile-header {
-        margin-bottom: 20px;
-        font-size: 24px;
-        color: #bb86fc;
-    }
-
-    .auth-form {
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-    }
-
-    .auth-label {
-        display: block;
-        margin-right: 10px;
-        font-size: 16px;
-        color: #e0e0e0;
-        flex: 1;
-        text-align: left;
-    }
-
-    .auth-input {
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #333;
-        background-color: #1e1e1e;
-        color: white;
-        width: 150px;
-        margin-right: 10px;
-    }
-
-    .auth-button {
-        padding: 10px 20px;
-        background-color: #bb86fc;
-        color: #121212;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .auth-button:hover {
-        background-color: #9a67ea;
-        transform: scale(1.05);
-    }
-
-    .invalid-data {
-        color: red;
-        font-size: 14px;
-    }
-
-    .logout-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .shadow_logout__btn {
-        padding: 10px 20px;
-        background-color: #bb86fc;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .shadow_logout__btn:hover {
-        background-color: purple;
-        transform: scale(1.05);
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 </style>
 
-<main class="create-edit-main">
-    <div class="profile-container">
-        <div class="profile-content">
-            <h1 class="profile-header" style="color:white;">Hello, <?= htmlspecialchars($_SESSION["username"]) ?> 👋🏼
+<body class="bg-gradient-to-r from-blue-800 via-gray-900 to-blue-800 bg-[300%_100%] animate-[backgroundMove_10s_ease_infinite] min-h-screen flex items-center justify-center text-gray-300 font-sans">
+    <main class="w-full max-w-md px-6 mt-14">
+        <div class="bg-gray-900 rounded-lg shadow-lg p-8 text-center">
+            <h1 class="text-2xl font-semibold text-blue-400 mb-4">
+                Hello, <?= htmlspecialchars($_SESSION["username"]) ?>
                 <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
-                    <span class="admin-badge" style="color:#bb86fc">(Admin)</span>
+                    <span class="text-sm text-blue-300">(Admin)</span>
                 <?php endif; ?>
             </h1>
-            <div class="profile-div">
-                <form method="POST" class="auth-form" onsubmit="return confirm('Are you sure you want to change your username?');">
-                    <label class="auth-label">New Username:</label>
-                    <input class="auth-input" type="text" name="new_username" value="<?= $_POST["new_username"] ?? "" ?>"/>
-                    <button class="auth-button" name="update_username">Update</button>
-                </form>
-                <?php if (isset($errors["new_username"])) { ?>
-                    <p class="invalid-data"> <?= $errors["new_username"] ?> </p>
-                <?php } ?>
-            </div>
-            <div class="profile-div">
-                <form method="POST" class="auth-form" onsubmit="return confirm('Are you sure you want to change your email address?');">
-                    <label class="auth-label">New Email:</label>
-                    <input class="auth-input" type="email" name="new_email" value="<?= $_POST["new_email"] ?? "" ?>"/>
-                    <button class="auth-button" name="update_email">Update</button>
-                </form>
-                <?php if (isset($errors["new_email"])) { ?>
-                    <p class="invalid-data"> <?= $errors["new_email"] ?> </p>
-                <?php } ?>
-                <form method="POST" class="auth-form" onsubmit="return confirm('Are you sure you want to change your password?');">
-                    <label class="auth-label">New Password:</label>
-                    <input class="auth-input" type="password" name="new_password"/>
-                    <button class="auth-button" name="update_password">Update</button>
-                </form>
-                <?php if (isset($errors["new_password"])) { ?>
-                    <p class="invalid-data"> <?= $errors["new_password"] ?> </p>
-                <?php } ?>
-            </div>
-            <div class="profile-logout-box">
-                <h2>Log out?</h2>
-                <div class="logout-buttons">
-                    <form action="/logout" method="POST">
-                        <button class="shadow_logout__btn">Logout</button>
-                    </form>
-                    <form action="/" method="POST">
-                        <button class="shadow_logout__btn">Home</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
 
-<?php require "../App/views/components/footer.php"; ?>
+            <!-- Update Username Form -->
+            <div class="mb-6">
+                <form method="POST" class="space-y-4">
+                    <div class="flex flex-col">
+                        <label class="text-left text-sm font-medium mb-1">New Username:</label>
+                        <input 
+                            type="text" 
+                            name="new_username" 
+                            value="<?= $_POST["new_username"] ?? "" ?>" 
+                            class="rounded-md border-gray-700 bg-gray-800 text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            required 
+                        />
+                        <?php if (isset($errors["new_username"])): ?>
+                            <p class="text-red-500 text-sm mt-1"><?= $errors["new_username"] ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <button 
+                        type="submit" 
+                        name="update_username" 
+                        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+                        onclick="return confirm('Are you sure you want to change your username?');"
+                    >
+                        Update Username
+                    </button>
+                </form>
+            </div>
+
+            <!-- Update Email Form -->
+            <div class="mb-6">
+                <form method="POST" class="space-y-4">
+                    <div class="flex flex-col">
+                        <label class="text-left text-sm font-medium mb-1">New Email:</label>
+                        <input 
+                            type="email" 
+                            name="new_email" 
+                            value="<?= $_POST["new_email"] ?? "" ?>" 
+                            class="rounded-md border-gray-700 bg-gray-800 text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            required 
+                        />
+                        <?php if (isset($errors["new_email"])): ?>
+                            <p class="text-red-500 text-sm mt-1"><?= $errors["new_email"] ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <button 
+                        type="submit" 
+                        name="update_email" 
+                        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+                        onclick="return confirm('Are you sure you want to change your email address?');"
+                    >
+                        Update Email
+                    </button>
+                </form>
+            </div>
+
+            <!-- Update Password Form -->
+            <div class="mb-6">
+                <form method="POST" class="space-y-4">
+                    <div class="flex flex-col">
+                        <label class="text-left text-sm font-medium mb-1">New Password:</label>
+                        <input 
+                            type="password" 
+                            name="new_password" 
+                            class="rounded-md border-gray-700 bg-gray-800 text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            required 
+                        />
+                        <?php if (isset($errors["new_password"])): ?>
+                            <p class="text-red-500 text-sm mt-1"><?= $errors["new_password"] ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <button 
+                        type="submit" 
+                        name="update_password" 
+                        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+                        onclick="return confirm('Are you sure you want to change your password?');"
+                    >
+                        Update Password
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+</body>
